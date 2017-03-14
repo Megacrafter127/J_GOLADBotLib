@@ -26,6 +26,18 @@ public enum CellState {
 	 */
 	public static final Set<CellState> ALIVE_STATES=Collections.unmodifiableSet(EnumSet.of(RED, BLUE));
 	/**
+	 * Convenience set that only contains {@link #BLUE}.
+	 */
+	public static final Set<CellState> BLUE_STATES=Collections.unmodifiableSet(EnumSet.of(BLUE));
+	/**
+	 * Convenience set that only contains {@link #RED}.
+	 */
+	public static final Set<CellState> RED_STATES=Collections.unmodifiableSet(EnumSet.of(RED));
+	/**
+	 * Convenience set that only contains {@link #DEAD}.
+	 */
+	public static final Set<CellState> DEAD_STATES=Collections.unmodifiableSet(EnumSet.of(DEAD));
+	/**
 	 * Whether or not this CellState marks a dead cell.
 	 */
 	public final boolean alive;
