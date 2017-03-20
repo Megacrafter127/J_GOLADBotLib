@@ -25,6 +25,7 @@ public class DefaultBoard extends AbstractMutableBoard {
 	 */
 	public final int height;
 	private final CellState[][] grid;
+	private Board next;
 	
 	/**
 	 * Creates a new board with the specified width and height, initializing each cell with the provided {@link CellState}.
@@ -85,23 +86,26 @@ public class DefaultBoard extends AbstractMutableBoard {
 		if(x<0 || y<0 || x>=width || y>=height) throw new IndexOutOfBoundsException(String.format("(%d,%d) is not within (0,0) and (%d,%d).", x,y,width,height));
 		CellState old=grid[x][y];
 		grid[x][y]=newState;
+		next=null;
 		return old;
 	}
 
 	@Override
 	public MutableBoard iterate() {
-		MutableBoard ret=new DefaultBoard(this);
+		if(next!=null) return new DefaultBoard(next);
+		MutableBoard r=new DefaultBoard(this);
 		for(int x=0;x<getWidth();x++) for(int y=0;y<getHeight();y++) {
 			switch(getAliveNeighborCount(x, y)) {
 			case 3:
-				ret.setCellStateAt(x, y, getNeighborCellCount(x, y, EnumSet.of(CellState.RED))<2?CellState.BLUE:CellState.RED);
+				if(!getCellStateAt(x,y).alive) r.setCellStateAt(x, y, getNeighborCellCount(x, y, EnumSet.of(CellState.RED))<2?CellState.BLUE:CellState.RED);
 				//$FALL-THROUGH$
 			case 2:
 				break;
 			default:
-				ret.setCellStateAt(x, y, CellState.DEAD);
+				r.setCellStateAt(x, y, CellState.DEAD);
 			}
 		}
-		return ret;
+		next=new DefaultBoard(r);
+		return r;
 	}
 }
